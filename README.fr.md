@@ -48,16 +48,17 @@ un projet étudiant, mais qui a des limites par rapport à un terminal professio
 
 ## Architecture
                                                                                                                        
-'''market-notes/
+```
+market-notes/
 ├── src/
-│ ├── data_fetch.py # Price retrieval and cleaning (Yahoo Finance)
-│ ├── analysis.py # Multi-horizon returns, volatility, correlations
-│ └── note_builder.py # Markdown note + chart generation
-├── notes/ # Generated notes, one per day (archived)
-├── charts/ # Charts associated with each note
+│   ├── data_fetch.py       # Récupération et nettoyage des prix (Yahoo Finance)
+│   ├── analysis.py         # Rendements multi-horizons, volatilité, corrélations
+│   └── note_builder.py     # Génération de la note markdown + graphique
+├── notes/                  # Notes générées, une par jour (archivées)
+├── charts/                 # Graphiques associés à chaque note
 ├── requirements.txt
 └── README.md
-'''
+```
 
 ## Installation
 
