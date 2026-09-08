@@ -48,8 +48,7 @@ un projet étudiant, mais qui a des limites par rapport à un terminal professio
 
 ## Architecture
                                                                                                                        
-'''
-market-notes/
+'''market-notes/
 ├── src/
 │ ├── data_fetch.py # Price retrieval and cleaning (Yahoo Finance)
 │ ├── analysis.py # Multi-horizon returns, volatility, correlations
