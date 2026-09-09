@@ -30,8 +30,8 @@ def generate_chart(df: pd.DataFrame, save_path: str):
     axes[0].legend(fontsize=8)
     axes[0].grid(alpha=0.3)
 
-    axes[0].xaxis.set_major_locator(mdates.WeekdayLocator(interval=2))  # 1 label toutes les 2 semaines
-    axes[0].xaxis.set_major_formatter(mdates.DateFormatter("%d %b"))    # format "21 Aug"
+    axes[0].xaxis.set_major_locator(mdates.WeekdayLocator(interval=2))
+    axes[0].xaxis.set_major_formatter(mdates.DateFormatter("%d %b"))
     axes[0].tick_params(axis="x", rotation=45)
 
     colors = ["green" if v >= 0 else "red" for v in daily_change]

@@ -2,7 +2,7 @@ import pandas as pd
 
 def compute_returns(df: pd.DataFrame, horizons: dict = None) -> pd.DataFrame:
     if horizons is None:
-        horizons = {"1D": 1, "1W": 5, "1M": 21}  # en jours de trading
+        horizons = {"1D": 1, "1W": 5, "1M": 21}
 
     results = {}
     for label, n_days in horizons.items():
@@ -27,7 +27,7 @@ def flag_notable_moves(returns_1d: pd.Series, threshold: float = 1.5) -> pd.Seri
 if __name__ == "__main__":
     from data_fetch import fetch_data, CORE_TICKERS
 
-    df = fetch_data(CORE_TICKERS, period="3mo")  # 3 mois pour avoir assez d'historique
+    df = fetch_data(CORE_TICKERS, period="3mo")  # 3 months to get enough data
 
     print("=== Rendements multi-horizons ===")
     returns = compute_returns(df)
