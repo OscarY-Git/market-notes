@@ -5,7 +5,12 @@ import pandas as pd
 from datetime import date
 
 from data_fetch import fetch_data, CORE_TICKERS
-from analysis import compute_returns, compute_volatility, compute_correlations, flag_notable_moves
+from analysis import (
+    compute_returns,
+    compute_volatility,
+    compute_correlations,
+    flag_notable_moves,
+)
 
 
 def move_emoji(pct: float) -> str:
@@ -26,7 +31,7 @@ def generate_chart(df: pd.DataFrame, save_path: str):
 
     for col in normalized.columns:
         axes[0].plot(normalized.index, normalized[col], label=col)
-    axes[0].set_title("Évolution (base 100)")
+    axes[0].set_title("Performance (base 100)")
     axes[0].legend(fontsize=8)
     axes[0].grid(alpha=0.3)
 
@@ -36,7 +41,7 @@ def generate_chart(df: pd.DataFrame, save_path: str):
 
     colors = ["green" if v >= 0 else "red" for v in daily_change]
     axes[1].bar(daily_change.index, daily_change.values, color=colors)
-    axes[1].set_title("Variation du jour (%)")
+    axes[1].set_title("Daily change (%)")
     axes[1].tick_params(axis="x", rotation=45)
     axes[1].grid(alpha=0.3)
 
@@ -53,43 +58,49 @@ def build_note(df: pd.DataFrame, chart_path: str, note_date: str) -> str:
 
     lines = [f"# Market Note — {note_date}\n"]
 
-    lines.append("## 🔑 En bref")
+    # --- "At a glance" section ---
+    lines.append("## 🔑 At a glance")
     for instrument in returns.index:
         pct = returns.loc[instrument, "1D"]
         lines.append(f"- {move_emoji(pct)} {instrument} {pct:+.2f}%")
     lines.append("")
 
+    # --- Chart ---
     chart_filename = os.path.basename(chart_path)
-    lines.append("## 📊 Graphique du jour")
+    lines.append("## 📊 Chart")
     lines.append(f"![chart](../charts/{chart_filename})\n")
 
-    lines.append("## 🔍 Focus : mouvement(s) notable(s)")
+    # --- Focus on notable moves ---
+    lines.append("## 🔍 Focus: notable move(s)")
     if notable.empty:
-        lines.append("Aucun mouvement notable aujourd'hui (seuil : ±1.5%).\n")
+        lines.append("No notable move today (threshold: ±1.5%).\n")
     else:
         for instrument, pct in notable.items():
-            lines.append(f"**{instrument} ({pct:+.2f}%)** — _[à compléter : explication]_\n")
+            lines.append(f"**{instrument} ({pct:+.2f}%)** — _[to complete: explanation]_\n")
 
+    # --- Collapsible technical details ---
     lines.append("<details>")
-    lines.append("<summary>📈 Voir le détail complet (multi-horizons, vol, corrélations)</summary>\n")
+    lines.append("<summary>📈 View full details (multi-horizon returns, volatility, correlations)</summary>\n")
 
-    lines.append("### Rendements multi-horizons (%)")
+    lines.append("### Multi-horizon returns (%)")
     lines.append(returns.to_markdown())
     lines.append("")
 
-    lines.append("### Volatilité annualisée (%)")
-    lines.append(vol.to_frame(name="Vol annualisée").to_markdown())
+    lines.append("### Annualized volatility (%)")
+    lines.append(vol.to_frame(name="Annualized vol").to_markdown())
     lines.append("")
 
-    lines.append("### Corrélations (30 derniers jours)")
+    lines.append("### Correlations (last 30 days)")
     lines.append(corr.to_markdown())
     lines.append("\n</details>\n")
 
-    lines.append("## 🎯 Vue")
-    lines.append("_[à compléter : ta vue à 1-2 semaines]_\n")
+    # --- View ---
+    lines.append("## 🎯 View")
+    lines.append("_[to complete: your 1-2 week view]_\n")
 
-    lines.append("## ✅ Suivi de la vue précédente")
-    lines.append("_[à compléter manuellement, ou automatisé plus tard]_\n")
+    # --- Follow-up on previous view ---
+    lines.append("## ✅ Follow-up on previous view")
+    lines.append("_[to complete manually, or automate later]_\n")
 
     return "\n".join(lines)
 
@@ -108,5 +119,5 @@ if __name__ == "__main__":
     with open(note_path, "w") as f:
         f.write(note_content)
 
-    print(f"✅ Note générée : {note_path}")
-    print(f"✅ Graphique généré : {chart_path}")
+    print(f"✅ Note generated: {note_path}")
+    print(f"✅ Chart generated: {chart_path}")
